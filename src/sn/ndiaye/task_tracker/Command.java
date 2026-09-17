@@ -1,8 +1,5 @@
 package sn.ndiaye.task_tracker;
 
-import java.util.List;
-import java.util.Map;
-
 public interface Command {
 
     void execute(String[] args);

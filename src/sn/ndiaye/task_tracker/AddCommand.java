@@ -8,7 +8,7 @@ public class AddCommand implements Command{
     }
 
     public void execute(String[] args) {
-        if(args.length == 0)
+        if (args.length == 0)
             throw new IllegalArgumentException("Error: Missing task name");
         if (args.length > 2)
             throw new IllegalArgumentException("Error: Too much arguments");
