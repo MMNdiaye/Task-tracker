@@ -1,5 +1,6 @@
 package sn.ndiaye.task_tracker;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class CommandLineInterface {
@@ -14,8 +15,12 @@ public class CommandLineInterface {
     public void start() {
         System.out.println("Welcome to Task Tracker. What do you want to do?");
         while (true) {
-            System.out.println("> ");
-            var command = scanner.nextLine();
+            System.out.print("> ");
+            var commandLine = scanner.nextLine();
+            var commandParts = commandLine.split("\\s+");
+            var command = Command.generate(commandParts[0], taskManager);
+            command.execute(Arrays.stream(commandParts).skip(1).toArray(String[]::new));
+            return;
         }
     }
 }
