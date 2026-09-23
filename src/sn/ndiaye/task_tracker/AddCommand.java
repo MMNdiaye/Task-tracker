@@ -7,14 +7,15 @@ public class AddCommand implements Command{
         this.taskManager = taskManager;
     }
 
-    public void execute(String[] args) {
+    public CommandResult execute(String[] args) {
         if (args.length == 0)
-            throw new IllegalArgumentException("Error: Missing task name");
+            return new CommandResult("Error: Missing task name.");
         if (args.length > 2)
-            throw new IllegalArgumentException("Error: Too much arguments");
+            return new CommandResult("Error: Too much arguments.");
         var name = args[0];
         var description = args.length == 2 ? args[1] : "";
         var task = new Task(name, description);
         taskManager.addTask(task);
+            return new CommandResult("Added task " + name + " with success");
     }
 }

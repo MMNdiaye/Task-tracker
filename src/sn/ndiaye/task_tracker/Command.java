@@ -2,12 +2,14 @@ package sn.ndiaye.task_tracker;
 
 public interface Command {
 
-    void execute(String[] args);
+    CommandResult execute(String[] args);
 
     static Command generate(String command, TaskManager taskManager) {
-        if (command.equals("add"))
-            return new AddCommand(taskManager);
-
-        throw new IllegalArgumentException("Error: Unregistered command");
+        return switch (command) {
+            case "add" -> new AddCommand(taskManager);
+            case "list" -> new ListCommand(taskManager);
+            case "exit" -> new ExitCommand();
+            default -> throw new IllegalArgumentException("Error: Unregistered command");
+        };
     }
 }

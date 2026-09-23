@@ -19,8 +19,13 @@ public class CommandLineInterface {
             var commandLine = scanner.nextLine();
             var commandParts = commandLine.split("\\s+");
             var command = Command.generate(commandParts[0], taskManager);
-            command.execute(Arrays.stream(commandParts).skip(1).toArray(String[]::new));
-            return;
+            var args = Arrays.stream(commandParts).skip(1).toArray(String[]::new);
+            var result = command.execute(args);
+            System.out.println(result.getMessage());
+            if (result.getContent() != null)
+                System.out.println(result.getContent());
+            if (command.getClass() == ExitCommand.class)
+                return;
         }
     }
 }

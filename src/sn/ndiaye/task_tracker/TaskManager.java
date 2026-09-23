@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class TaskManager {
+
     public void addTask(Task task) {
         var tasks = new ArrayList<>(loadTasks());
         if (tasks.isEmpty())
@@ -16,7 +17,9 @@ public class TaskManager {
         saveTasks(tasks);
     }
 
-    public void listTasks() {}
+    public List<Task> getTasks() {
+        return loadTasks();
+    }
 
     public void updateTask() {}
 
