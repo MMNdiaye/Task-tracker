@@ -8,8 +8,9 @@ public interface Command {
         return switch (command) {
             case "add" -> new AddCommand(taskManager);
             case "list" -> new ListCommand(taskManager);
+            case "delete" -> new DeleteCommand(taskManager);
             case "exit" -> new ExitCommand();
-            default -> throw new IllegalArgumentException("Error: Unregistered command");
+            default -> new NoCommand();
         };
     }
 }

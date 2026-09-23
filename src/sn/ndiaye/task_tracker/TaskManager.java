@@ -23,7 +23,15 @@ public class TaskManager {
 
     public void updateTask() {}
 
-    public void deleteTask() {}
+    public boolean deleteTask(Long id) {
+        var tasks = new ArrayList<>(loadTasks());
+        var originalCount = tasks.size();
+        tasks.removeIf(task -> id.equals(task.getId()));
+        var isDeleted = tasks.size() < originalCount;
+        if (isDeleted)
+            saveTasks(tasks);
+        return isDeleted;
+    }
 
     private List<Task> loadTasks() {
         var file = new File("tasks.json");

@@ -10,7 +10,7 @@ public class ListCommand implements Command{
     @Override
     public CommandResult execute(String[] args) {
         if (args.length != 0)
-            throw new IllegalArgumentException("Error! Too much arguments");
+            return new CommandResult("Error! Too much arguments");
         var tasks = taskManager.getTasks();
         return new CommandResult("Tasks fetched with success.",
                 tasks);
