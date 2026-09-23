@@ -8,6 +8,7 @@ public interface Command {
         return switch (command) {
             case "add" -> new AddCommand(taskManager);
             case "list" -> new ListCommand(taskManager);
+            case "update" -> new UpdateCommand(taskManager);
             case "delete" -> new DeleteCommand(taskManager);
             case "exit" -> new ExitCommand();
             default -> new NoCommand();

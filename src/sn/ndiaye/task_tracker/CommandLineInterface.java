@@ -17,7 +17,8 @@ public class CommandLineInterface {
         while (true) {
             System.out.print("> ");
             var commandLine = scanner.nextLine();
-            var commandParts = commandLine.split("\\s+");
+            var commandParts = commandLine.split("\\s+(?=([^\"]*\"[^\"]*\"|[^\"]*$))");
+            System.out.println(Arrays.toString(commandParts));
             var command = Command.generate(commandParts[0], taskManager);
             var args = Arrays.stream(commandParts).skip(1).toArray(String[]::new);
             var result = command.execute(args);

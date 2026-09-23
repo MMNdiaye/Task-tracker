@@ -21,7 +21,17 @@ public class TaskManager {
         return loadTasks();
     }
 
-    public void updateTask() {}
+    public boolean updateTask(Long id, String newName) {
+        var tasks = new ArrayList<>(loadTasks());
+        for (var task : tasks) {
+            if (id.equals(task.getId())) {
+                task.setName(newName);
+                saveTasks(tasks);
+                return true;
+            }
+        }
+        return false;
+    }
 
     public boolean deleteTask(Long id) {
         var tasks = new ArrayList<>(loadTasks());
