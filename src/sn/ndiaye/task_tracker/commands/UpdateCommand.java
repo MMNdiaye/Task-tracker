@@ -1,9 +1,11 @@
-package sn.ndiaye.task_tracker;
+package sn.ndiaye.task_tracker.commands;
 
-public class UpdateCommand implements Command{
+import sn.ndiaye.task_tracker.TaskManager;
+
+class UpdateCommand implements Command{
     private TaskManager taskManager;
 
-    public UpdateCommand(TaskManager taskManager) {
+    UpdateCommand(TaskManager taskManager) {
         this.taskManager = taskManager;
     }
 

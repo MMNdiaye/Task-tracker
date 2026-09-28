@@ -1,9 +1,11 @@
-package sn.ndiaye.task_tracker;
+package sn.ndiaye.task_tracker.commands;
 
-public class DeleteCommand implements Command{
+import sn.ndiaye.task_tracker.TaskManager;
+
+class DeleteCommand implements Command{
     private TaskManager taskManager;
 
-    public DeleteCommand(TaskManager taskManager) {
+    DeleteCommand(TaskManager taskManager) {
         this.taskManager = taskManager;
     }
 

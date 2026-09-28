@@ -1,11 +1,14 @@
 package sn.ndiaye.task_tracker;
 
-import java.util.Objects;
+import java.time.LocalDate;
 
 public class Task {
     private Long id;
     private String name;
     private String description;
+    private TaskStatus status;
+    private LocalDate createdAt;
+    private LocalDate modifiedAt;
 
     public Task() {
 

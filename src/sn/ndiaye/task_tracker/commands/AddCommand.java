@@ -1,9 +1,12 @@
-package sn.ndiaye.task_tracker;
+package sn.ndiaye.task_tracker.commands;
 
-public class AddCommand implements Command{
+import sn.ndiaye.task_tracker.Task;
+import sn.ndiaye.task_tracker.TaskManager;
+
+class AddCommand implements Command{
     private TaskManager taskManager;
 
-    public AddCommand(TaskManager taskManager) {
+    AddCommand(TaskManager taskManager) {
         this.taskManager = taskManager;
     }
 

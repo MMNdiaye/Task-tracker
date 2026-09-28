@@ -1,4 +1,6 @@
-package sn.ndiaye.task_tracker;
+package sn.ndiaye.task_tracker.commands;
+
+import sn.ndiaye.task_tracker.TaskManager;
 
 public interface Command {
 
