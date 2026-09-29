@@ -1,7 +1,7 @@
 package sn.ndiaye.task_tracker;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Task {
     private Long id;
@@ -72,8 +72,16 @@ public class Task {
     @Override
     public String toString() {
         return String.format("{Id: %d, task: %s, description: %s, status: %s, created at: %s, " +
-                "last modified at: %s}", id, name, description, status, createdAt, lastModifiedAt);
+                "last modified at: %s}", id, name, description, status,
+                formattedDate(createdAt),
+                formattedDate(lastModifiedAt));
     }
 
+    private String formattedDate(LocalDateTime dateTime) {
+        var dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        if (dateTime == null)
+            return "null";
+        return dateTime.format(dateFormatter);
+    }
 
 }

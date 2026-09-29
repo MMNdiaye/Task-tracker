@@ -1,6 +1,7 @@
 package sn.ndiaye.task_tracker;
 
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -18,8 +19,17 @@ public class TaskManager {
         saveTasks(tasks);
     }
 
-    public List<Task> getTasks() {
+    public List<Task> getAllTasks() {
         return loadTasks();
+    }
+
+    public List<Task> getTasksWithStatus(TaskStatus taskStatus) {
+        var tasks = loadTasks();
+        if (taskStatus == null)
+            return tasks;
+        return tasks.stream()
+                .filter(t -> taskStatus.equals(t.getStatus()))
+                .toList();
     }
 
     public boolean updateTask(Long id, String newName) {
@@ -27,6 +37,7 @@ public class TaskManager {
         for (var task : tasks) {
             if (id.equals(task.getId())) {
                 task.setName(newName);
+                task.setLastModifiedAt(LocalDateTime.now());
                 saveTasks(tasks);
                 return true;
             }
@@ -42,6 +53,18 @@ public class TaskManager {
         if (isDeleted)
             saveTasks(tasks);
         return isDeleted;
+    }
+
+    public boolean updateStatus(Long id, TaskStatus taskStatus) {
+        var tasks = loadTasks();
+        for (var task : tasks)
+            if (id.equals(task.getId())) {
+                task.setStatus(taskStatus);
+                task.setLastModifiedAt(LocalDateTime.now());
+                saveTasks(tasks);
+                return true;
+            }
+        return false;
     }
 
     private List<Task> loadTasks() {
