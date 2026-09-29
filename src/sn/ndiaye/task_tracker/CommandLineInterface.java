@@ -21,9 +21,11 @@ public class CommandLineInterface {
             System.out.print("> ");
             var commandLine = scanner.nextLine();
             var commandParts = commandLine.split("\\s+(?=([^\"]*\"[^\"]*\"|[^\"]*$))");
-            System.out.println(Arrays.toString(commandParts));
             var command = Command.generate(commandParts[0], taskManager);
-            var args = Arrays.stream(commandParts).skip(1).toArray(String[]::new);
+            var args = Arrays.stream(commandParts)
+                    .skip(1)
+                    .map(s -> s.replace("\"", ""))
+                    .toArray(String[]::new);
             var result = command.execute(args);
             System.out.println(result.getMessage());
             if (result.getContent() != null)

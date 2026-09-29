@@ -3,6 +3,7 @@ package sn.ndiaye.task_tracker;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class TaskManager {
@@ -51,6 +52,8 @@ public class TaskManager {
             return JsonParser.toObjects(json, Task.class);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
+        } catch (NoSuchElementException e) {
+            return new ArrayList<>();
         }
     }
 
