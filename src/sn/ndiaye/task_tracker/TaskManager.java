@@ -33,7 +33,7 @@ public class TaskManager {
     }
 
     public boolean updateTask(Long id, String newName) {
-        var tasks = new ArrayList<>(loadTasks());
+        var tasks = loadTasks();
         for (var task : tasks) {
             if (id.equals(task.getId())) {
                 task.setName(newName);
@@ -47,12 +47,13 @@ public class TaskManager {
 
     public boolean deleteTask(Long id) {
         var tasks = new ArrayList<>(loadTasks());
-        var originalCount = tasks.size();
-        tasks.removeIf(task -> id.equals(task.getId()));
-        var isDeleted = tasks.size() < originalCount;
-        if (isDeleted)
-            saveTasks(tasks);
-        return isDeleted;
+        for (int i = 0; i < tasks.size(); i++)
+            if (id.equals(tasks.get(i).getId())) {
+                tasks.remove(i);
+                saveTasks(tasks);
+                return true;
+            }
+        return false;
     }
 
     public boolean updateStatus(Long id, TaskStatus taskStatus) {
@@ -69,23 +70,20 @@ public class TaskManager {
 
     private List<Task> loadTasks() {
         var file = new File("tasks.json");
-        String json;
         try (Scanner sc = new Scanner(file)) {
-            json = sc.nextLine();
+            // Our json is all written on one line
+            var json = sc.nextLine();
             return JsonParser.toObjects(json, Task.class);
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException | NoSuchElementException e) {
             throw new RuntimeException(e);
-        } catch (NoSuchElementException e) {
-            return new ArrayList<>();
         }
     }
 
     private void saveTasks(List<Task> tasks) {
-        try {
-            var fileWriter = new FileWriter("tasks.json");
+        var file = new File("tasks.json");
+        try(var fileWriter = new FileWriter(file)){
             var json = JsonParser.toJsons(tasks);
             fileWriter.write(json);
-            fileWriter.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

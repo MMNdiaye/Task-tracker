@@ -11,6 +11,8 @@ public class Task {
     private LocalDateTime createdAt;
     private LocalDateTime lastModifiedAt;
 
+    // This constructor will be invoked at runtime for json conversion
+    // the getter and setter of the fields will be used  for json/object conversion
     public Task() {
 
     }
@@ -21,6 +23,7 @@ public class Task {
         this.status = TaskStatus.TODO;
         this.createdAt = LocalDateTime.now();
     }
+
     public void setId(Long id) {
         this.id = id;
     }

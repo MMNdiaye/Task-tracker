@@ -9,13 +9,11 @@ import java.util.Objects;
 
 public class JsonParser {
     public static <T> List<T> toObjects(String listJson, Class<T> objectClass) {
-        // From [{"f": val, "f2": val2}, {"f": val3}]
-        // To list of formatted string "f:val, f2:val"  for easier to extract object
         listJson = listJson.replaceAll("[\\[\\]]", "");
-        String[] objectJsons = listJson.split("},");
+        String[] objectJsons = listJson.split(",(?=\\s+\\{.*})");
         return Arrays.stream(objectJsons)
-                .map(s -> s.replaceAll("[{}\"]", ""))
-                .map(s -> toObject(s, objectClass))
+                .map(json -> json.replace("\\s+", ""))
+                .map(json -> toObject(json, objectClass))
                 .filter(Objects::nonNull)
                 .toList();
     }
@@ -25,7 +23,8 @@ public class JsonParser {
             if (objectJson.isEmpty())
                 return null;
             var object = objectClass.getConstructor().newInstance();
-            String[] fields = objectJson.split(",");
+            String[] fields = objectJson.replaceAll("[{}\"]", "")
+                    .split(",");
             for (var field : fields) {
                 var fieldName = field.replaceAll(":.*", "").trim();
                 var fieldValue = field.replaceAll(".*: ", "").trim();
@@ -49,7 +48,6 @@ public class JsonParser {
         }
     }
     private static Class<?> getFieldType(Class<?> objectClass, String fieldName) {
-        
         try {
             return objectClass.getDeclaredField(fieldName).getType();
         } catch (NoSuchFieldException e) {
