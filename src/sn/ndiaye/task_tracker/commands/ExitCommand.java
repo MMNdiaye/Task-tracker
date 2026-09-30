@@ -6,4 +6,9 @@ public class ExitCommand implements Command {
     public CommandResult execute(String[] args) {
         return new CommandResult("Thank you for using this application. Goodbye!");
     }
+
+    @Override
+    public boolean isTerminal() {
+        return true;
+    }
 }

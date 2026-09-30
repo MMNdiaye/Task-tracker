@@ -1,7 +1,7 @@
 package sn.ndiaye.task_tracker.commands;
 
 public class CommandResult {
-    private String message;
+    private final String message;
     private Object content;
 
     CommandResult(String message) {
@@ -11,6 +11,18 @@ public class CommandResult {
     CommandResult(String message, Object content) {
         this.message = message;
         this.content = content;
+    }
+
+    static CommandResult missingArgs() {
+        return new CommandResult("Error: Missing argument(s)");
+    }
+
+    static CommandResult tooManyArgs() {
+        return new CommandResult("Error: Too many argument(s)");
+    }
+
+    static CommandResult missingId() {
+        return new CommandResult("Error: this id doesn't exist");
     }
 
     public String getMessage() {

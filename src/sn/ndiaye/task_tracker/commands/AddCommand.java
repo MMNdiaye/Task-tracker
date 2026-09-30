@@ -4,7 +4,7 @@ import sn.ndiaye.task_tracker.Task;
 import sn.ndiaye.task_tracker.TaskManager;
 
 class AddCommand implements Command{
-    private TaskManager taskManager;
+    private final TaskManager taskManager;
 
     AddCommand(TaskManager taskManager) {
         this.taskManager = taskManager;
@@ -12,9 +12,9 @@ class AddCommand implements Command{
 
     public CommandResult execute(String[] args) {
         if (args.length == 0)
-            return new CommandResult("Error: Missing task name.");
+            return CommandResult.missingArgs();
         if (args.length > 2)
-            return new CommandResult("Error: Too much arguments.");
+            return CommandResult.tooManyArgs();
         var name = args[0];
         var description = args.length == 2 ? args[1] : "";
         var task = new Task(name, description);

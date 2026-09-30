@@ -19,4 +19,8 @@ public interface Command {
             default -> new NoCommand();
         };
     }
+
+    default boolean isTerminal() {
+        return false;
+    }
 }

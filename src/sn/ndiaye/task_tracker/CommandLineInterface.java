@@ -7,8 +7,8 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class CommandLineInterface {
-    private Scanner scanner;
-    private TaskManager taskManager;
+    private final Scanner scanner;
+    private final TaskManager taskManager;
 
     public CommandLineInterface(Scanner scanner, TaskManager taskManager) {
         this.scanner = scanner;
@@ -30,7 +30,7 @@ public class CommandLineInterface {
             System.out.println(result.getMessage());
             if (result.getContent() != null)
                 System.out.println(result.getContent());
-            if (command.getClass() == ExitCommand.class)
+            if (command.isTerminal())
                 return;
         }
     }
