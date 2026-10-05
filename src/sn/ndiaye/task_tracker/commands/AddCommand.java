@@ -11,10 +11,8 @@ class AddCommand implements Command{
     }
 
     public CommandResult execute(String[] args) {
-        if (args.length == 0)
-            return CommandResult.missingArgs();
-        if (args.length > 2)
-            return CommandResult.tooManyArgs();
+        var error = ArgsValidator.validateSize(args, 1, 2);
+        if (error.isPresent()) return error.get();
         var name = args[0];
         var description = args.length == 2 ? args[1] : "";
         var task = new Task(name, description);

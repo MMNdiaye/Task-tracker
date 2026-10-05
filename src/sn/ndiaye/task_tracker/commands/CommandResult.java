@@ -22,7 +22,11 @@ public class CommandResult {
     }
 
     static CommandResult missingId() {
-        return new CommandResult("Error: this id doesn't exist");
+        return new CommandResult("Error: This id doesn't exist");
+    }
+
+    static CommandResult notId() {
+        return new CommandResult("Error: Not a numeric id");
     }
 
     public String getMessage() {

@@ -11,13 +11,11 @@ class UpdateCommand implements Command{
 
     @Override
     public CommandResult execute(String[] args) {
-        if (args.length < 2)
-            return new CommandResult("Error: Missing arguments");
-        if (args.length > 2)
-            return new CommandResult("Error: Too much arguments");
+        var error = ArgsValidator.firstError(
+                () -> ArgsValidator.validateSize(args, 2, 2),
+                () -> ArgsValidator.validateId(args[0]));
+        if (error.isPresent()) return error.get();
         var id = args[0];
-        if (!id.matches("[0-9]+"))
-            return new CommandResult("Error: Not a numeric id");
         var newName = args[1];
         var isUpdated = taskManager.updateTask(Long.valueOf(id), newName);
         if (isUpdated)

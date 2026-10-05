@@ -1,6 +1,6 @@
 package sn.ndiaye.task_tracker.commands;
 
-public class ExitCommand implements Command {
+class ExitCommand implements Command {
 
     @Override
     public CommandResult execute(String[] args) {

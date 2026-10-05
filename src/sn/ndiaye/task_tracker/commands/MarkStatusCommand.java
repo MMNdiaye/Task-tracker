@@ -14,16 +14,13 @@ public class MarkStatusCommand implements Command {
 
     @Override
     public CommandResult execute(String[] args) {
-        if (args.length < 1)
-            return CommandResult.missingArgs();
-        if (args.length > 1)
-            return CommandResult.tooManyArgs();
-        var idArg = args[0];
-        if (!idArg.matches("[0-9]+"))
-            return new CommandResult("Error: Not a id");
-        var isMarkedAsDone = taskManager.updateStatus(Long.valueOf(idArg), statusToMark);
+        var error = ArgsValidator.firstError(
+                () -> ArgsValidator.validateSize(args, 1, 1),
+                () -> ArgsValidator.validateId(args[0]));
+        if (error.isPresent()) return error.get();
+        var isMarkedAsDone = taskManager.updateStatus(Long.valueOf(args[0]), statusToMark);
         if (isMarkedAsDone)
-            return new CommandResult("Task with id " + idArg + " is marked as " + statusToMark);
+            return new CommandResult("Task with id " + args[0] + " is marked as " + statusToMark);
         else
             return CommandResult.missingId();
     }

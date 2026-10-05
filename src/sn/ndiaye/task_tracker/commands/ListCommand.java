@@ -1,11 +1,8 @@
 package sn.ndiaye.task_tracker.commands;
 
-import sn.ndiaye.task_tracker.Task;
 import sn.ndiaye.task_tracker.TaskManager;
 import sn.ndiaye.task_tracker.TaskStatus;
-
 import java.util.Arrays;
-import java.util.List;
 
 class ListCommand implements Command{
     private final TaskManager taskManager;
@@ -16,8 +13,8 @@ class ListCommand implements Command{
 
     @Override
     public CommandResult execute(String[] args) {
-        if (args.length > 1)
-            return CommandResult.tooManyArgs();
+        var error = ArgsValidator.validateSize(args, 0, 1);
+        if (error.isPresent()) return error.get();
 
         if (args.length == 0)
             return new CommandResult("Tasks fetched with success", taskManager.getAllTasks());

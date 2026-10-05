@@ -11,14 +11,12 @@ class DeleteCommand implements Command{
 
     @Override
     public CommandResult execute(String[] args) {
-        if (args.length < 1)
-            return CommandResult.missingArgs();
-        if (args.length > 1)
-            return CommandResult.tooManyArgs();
-        var id = args[0];
-        if (!id.matches("[0-9]+"))
-            return new CommandResult("Error: Not a numeric id");
-        var isDeleted = taskManager.deleteTask(Long.valueOf(id));
+        var error = ArgsValidator.firstError(
+                () -> ArgsValidator.validateSize(args, 1, 1),
+                () -> ArgsValidator.validateId(args[0])
+        );
+        if (error.isPresent()) return error.get();
+        var isDeleted = taskManager.deleteTask(Long.valueOf(args[0]));
         if (isDeleted)
             return new CommandResult("Task with id " + args[0] + " is successfully deleted");
         else
