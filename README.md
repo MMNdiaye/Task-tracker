@@ -3,11 +3,11 @@
 This simple Task Tracker application uses a command line interface to help you track and manage your tasks.
 This application is a project taken from [roadmap.sh](https://roadmap.sh/projects/task-tracker) and the requirements
 come from them as well. 
-***
+
 ## Requirements 
 Your data is stored in a json file.
 No external library has been used, so the java-native I/O operations and a custom JsonParser has been used.
-***
+
 ## Commands
 - Add a task: **add** taskName _{taskDescription}_
 - List all tasks: **list**
