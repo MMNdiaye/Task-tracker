@@ -1,8 +1,10 @@
 package sn.ndiaye.task_tracker.commands;
 
+import sn.ndiaye.task_tracker.Task;
 import sn.ndiaye.task_tracker.TaskManager;
 import sn.ndiaye.task_tracker.TaskStatus;
 import java.util.Arrays;
+import java.util.List;
 
 class ListCommand implements Command{
     private final TaskManager taskManager;
@@ -17,7 +19,7 @@ class ListCommand implements Command{
         if (error.isPresent()) return error.get();
 
         if (args.length == 0)
-            return new CommandResult("Tasks fetched with success", taskManager.getAllTasks());
+            return getResultWithFormattedTasks(taskManager.getAllTasks());
 
         var arg = args[0];
         var statusRegex = getStatusRegex();
@@ -27,7 +29,7 @@ class ListCommand implements Command{
                 TaskStatus.valueOf(arg.toUpperCase()
                         .replace("-", "_"))
         );
-        return new CommandResult("Tasks fetched with success", tasks);
+        return getResultWithFormattedTasks(tasks);
     }
 
     // Cli commands status are in this form: xx-xx-xx
@@ -39,5 +41,14 @@ class ListCommand implements Command{
                         .replace("_", "-"))
                 .reduce((stat1, stat2) -> stat1 + "|" + stat2)
                 .orElse("");
+    }
+
+    private CommandResult getResultWithFormattedTasks(List<Task> tasks) {
+        var formattedResult =  tasks.stream()
+                .map(Task::toString)
+                .map(s -> s.replaceAll("\\\\\"", "\""))
+                .reduce((s1, s2) -> s1 + "\n" + s2)
+                .orElse("No tasks");
+        return new CommandResult("Task fetched with success", formattedResult);
     }
 }

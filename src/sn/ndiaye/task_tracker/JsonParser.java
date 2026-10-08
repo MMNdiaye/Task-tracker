@@ -23,11 +23,13 @@ public class JsonParser {
             if (objectJson.isEmpty())
                 return null;
             var object = objectClass.getConstructor().newInstance();
-            String[] fields = objectJson.replaceAll("[{}\"]", "")
-                    .split(",");
+            objectJson = objectJson.replaceAll("([{}])", "");
+            String[] fields = objectJson.split(",(?=\\s*\")");
             for (var field : fields) {
-                var fieldName = field.replaceAll(":.*", "").trim();
-                var fieldValue = field.replaceAll(".*: ", "").trim();
+                var fieldName = field.replaceAll(":.*", "")
+                        .replaceAll("\"", "").trim();
+                var fieldValue = field.replaceAll(".*: ", "")
+                        .replaceAll("(^\"|\"$)", "").trim();
                 var setter = getFieldSetter(fieldName, objectClass);
                 var fieldType = setter.getParameters()[0].getType();
                 setter.invoke(object, getTypedValue(fieldType, fieldValue));
@@ -90,12 +92,14 @@ public class JsonParser {
         return jsonString;
     }
 
-    private static <T> String toJsonFieldNameAndValueFormat(T obj, Method method) {
-        var fieldName = method.getName().substring(3);
+    private static <T> String toJsonFieldNameAndValueFormat(T obj, Method getter) {
+        var fieldName = getter.getName().substring(3);
         fieldName = fieldName.substring(0, 1).toLowerCase() + fieldName.substring(1);
         try {
-            var fieldValue = method.invoke(obj, null);
-            return "\"" + fieldName + "\"" + ": " + ((fieldValue instanceof Long) ? fieldValue : "\"" + fieldValue + "\"");
+            var fieldValue = getter.invoke(obj, null);
+            if (!(fieldValue instanceof Number))
+                fieldValue = "\"" + fieldValue + "\"";
+            return "\"" + fieldName + "\"" + ": " + fieldValue;
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
