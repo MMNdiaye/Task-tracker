@@ -21,6 +21,8 @@ public class CommandLineInterface {
         while (true) {
             System.out.print("> ");
             var commandLine = scanner.nextLine();
+            if (commandLine.isBlank())
+                continue;
             var commandParts = parseCommand(commandLine);
             var command = Command.generate(commandParts[0], taskManager);
             var args = Arrays.stream(commandParts)
@@ -70,7 +72,7 @@ public class CommandLineInterface {
         if (!token.isEmpty()) {
             var previousCharacterIndex = token.length() - 1;
             var previousCharacter = token.substring(previousCharacterIndex);
-            if (!previousCharacter.equals("\\s")) {
+            if (!previousCharacter.equals(" ")) {
                 parts.add(token.toString());
                 token = new StringBuilder();
             }

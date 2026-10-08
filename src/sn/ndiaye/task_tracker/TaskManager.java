@@ -8,6 +8,11 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class TaskManager {
+    private final String SAVEFILE_PATH;
+
+    public TaskManager(String SAVEFILE_PATH) {
+        this.SAVEFILE_PATH = SAVEFILE_PATH;
+    }
 
     public void addTask(Task task) {
         var tasks = new ArrayList<>(loadTasks());
@@ -69,7 +74,7 @@ public class TaskManager {
     }
 
     private List<Task> loadTasks() {
-        var file = new File("tasks.json");
+        var file = new File(SAVEFILE_PATH);
         try (Scanner sc = new Scanner(file)) {
             // Our json is all written on one line
             var json = sc.nextLine();
@@ -80,7 +85,7 @@ public class TaskManager {
     }
 
     private void saveTasks(List<Task> tasks) {
-        var file = new File("tasks.json");
+        var file = new File(SAVEFILE_PATH);
         try(var fileWriter = new FileWriter(file)){
             var json = JsonParser.toJsons(tasks);
             fileWriter.write(json);

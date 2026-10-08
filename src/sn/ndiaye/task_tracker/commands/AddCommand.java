@@ -17,6 +17,6 @@ class AddCommand implements Command{
         var description = args.length == 2 ? args[1] : "";
         var task = new Task(name, description);
         taskManager.addTask(task);
-            return new CommandResult("Added task " + name + " with success");
+        return new CommandResult("Added new task with id: " + task.getId() + " with success");
     }
 }

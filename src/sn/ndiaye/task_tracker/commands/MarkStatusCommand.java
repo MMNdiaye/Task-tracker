@@ -3,7 +3,7 @@ package sn.ndiaye.task_tracker.commands;
 import sn.ndiaye.task_tracker.TaskManager;
 import sn.ndiaye.task_tracker.TaskStatus;
 
-public class MarkStatusCommand implements Command {
+class MarkStatusCommand implements Command {
     private final TaskManager taskManager;
     private final TaskStatus statusToMark;
 

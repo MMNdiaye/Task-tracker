@@ -12,7 +12,6 @@ public class JsonParser {
         listJson = listJson.replaceAll("[\\[\\]]", "");
         String[] objectJsons = listJson.split(",(?=\\s+\\{.*})");
         return Arrays.stream(objectJsons)
-                .map(json -> json.replace("\\s+", ""))
                 .map(json -> toObject(json, objectClass))
                 .filter(Objects::nonNull)
                 .toList();
@@ -23,12 +22,15 @@ public class JsonParser {
             if (objectJson.isEmpty())
                 return null;
             var object = objectClass.getConstructor().newInstance();
-            objectJson = objectJson.replaceAll("([{}])", "");
+            // We want to strip the remaining curly brackets due to toObjects splitting
+            // We want to replace escaped quotes from the json to normal quotes
+            objectJson = objectJson.trim().replaceAll("(^\\{|}$)", "")
+                    .replaceAll("\\\\\"", "\"");
             String[] fields = objectJson.split(",(?=\\s*\")");
             for (var field : fields) {
                 var fieldName = field.replaceAll(":.*", "")
                         .replaceAll("\"", "").trim();
-                var fieldValue = field.replaceAll(".*: ", "")
+                var fieldValue = field.replaceFirst("^[^:]*:\\s*", "")
                         .replaceAll("(^\"|\"$)", "").trim();
                 var setter = getFieldSetter(fieldName, objectClass);
                 var fieldType = setter.getParameters()[0].getType();

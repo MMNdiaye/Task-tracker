@@ -22,6 +22,7 @@ class ArgsValidator {
         return Optional.empty();
     }
 
+    @SafeVarargs
     static Optional<CommandResult> firstError(Supplier<Optional<CommandResult>>... checks) {
         for (var check : checks) {
             var error = check.get();

@@ -46,7 +46,6 @@ class ListCommand implements Command{
     private CommandResult getResultWithFormattedTasks(List<Task> tasks) {
         var formattedResult =  tasks.stream()
                 .map(Task::toString)
-                .map(s -> s.replaceAll("\\\\\"", "\""))
                 .reduce((s1, s2) -> s1 + "\n" + s2)
                 .orElse("No tasks");
         return new CommandResult("Task fetched with success", formattedResult);
