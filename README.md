@@ -11,7 +11,7 @@ No external library has been used, so the java-native I/O operations and a custo
 ## Commands
 - Add a task: **add** taskName _{taskDescription}_
 - List all tasks: **list**
-- List tasks filtered by status: **list** {todo|done|in_progress}
+- List tasks filtered by status: **list** {todo|done|in-progress}
 - Update tasks name: **update** taskId newName
 - Mark tasks as in progress: **mark-in-progress** taskId
 - Mark tasks as done: **mark-done** taskId

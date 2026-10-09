@@ -10,7 +10,7 @@ import java.util.Objects;
 public class JsonParser {
     public static <T> List<T> toObjects(String listJson, Class<T> objectClass) {
         listJson = listJson.replaceAll("(^\\[|\\]$)", "");
-        String[] objectJsons = listJson.split(",(?=\\s+\\{.*})");
+        String[] objectJsons = listJson.split(",(?=\\s+\\{\"[^\"]*\":.*})");
         return Arrays.stream(objectJsons)
                 .map(json -> toObject(json, objectClass))
                 .filter(Objects::nonNull)
@@ -63,7 +63,8 @@ public class JsonParser {
 
     private static Object getTypedValue(Class<?> fieldType, String fieldValue) {
         // Classes like LocalDateTime will crash if you pass them "null" to convert
-        if (Objects.equals(fieldValue, "null"))
+        var isFieldValueAString = fieldType == String.class;
+        if (Objects.equals(fieldValue, "null") && !isFieldValueAString)
             return null;
         return fieldType == String.class ? fieldValue
                 : fieldType == Long.class ? Long.parseLong(fieldValue)
