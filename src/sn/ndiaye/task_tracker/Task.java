@@ -2,6 +2,7 @@ package sn.ndiaye.task_tracker;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class Task {
     private Long id;
@@ -18,6 +19,7 @@ public class Task {
     }
 
     public Task(String name, String description) {
+        Objects.requireNonNull(name);
         this.name = name;
         this.description = description;
         this.status = TaskStatus.TODO;
@@ -29,6 +31,7 @@ public class Task {
     }
 
     public void setName(String name) {
+        Objects.requireNonNull(name);
         this.name = name;
     }
 
@@ -37,6 +40,7 @@ public class Task {
     }
 
     public void setStatus(TaskStatus status) {
+        Objects.requireNonNull(status);
         this.status = status;
     }
 
@@ -85,10 +89,14 @@ public class Task {
     }
 
     private String formattedString(String s) {
+        if(s == null)
+            return "";
         return s.replaceAll("\\\\\"", "\"");
     }
 
     private String formattedStatus(TaskStatus status) {
+        if (status == null)
+            throw new IllegalStateException("A taks status should never be null");
         return status.toString().toLowerCase().replaceAll("_", "-");
     }
 
