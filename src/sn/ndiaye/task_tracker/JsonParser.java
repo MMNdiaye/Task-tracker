@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public class JsonParser {
     public static <T> List<T> toObjects(String listJson, Class<T> objectClass) {
-        listJson = listJson.replaceAll("[\\[\\]]", "");
+        listJson = listJson.replaceAll("(^\\[|\\]$)", "");
         String[] objectJsons = listJson.split(",(?=\\s+\\{.*})");
         return Arrays.stream(objectJsons)
                 .map(json -> toObject(json, objectClass))
@@ -24,8 +24,7 @@ public class JsonParser {
             var object = objectClass.getConstructor().newInstance();
             // We want to strip the remaining curly brackets due to toObjects splitting
             // We want to replace escaped quotes from the json to normal quotes
-            objectJson = objectJson.trim().replaceAll("(^\\{|}$)", "")
-                    .replaceAll("\\\\\"", "\"");
+            objectJson = objectJson.trim().replaceAll("(^\\{|}$)", "");
             String[] fields = objectJson.split(",(?=\\s*\")");
             for (var field : fields) {
                 var fieldName = field.replaceAll(":.*", "")
@@ -37,10 +36,12 @@ public class JsonParser {
                 setter.invoke(object, getTypedValue(fieldType, fieldValue));
             }
             return object;
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                 NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
     }
+
     private static Method getFieldSetter(String fieldName, Class<?> objectClass) {
         var fieldNameFormatInMethod = fieldName.substring(0, 1).toUpperCase() +
                 fieldName.substring(1);
@@ -51,6 +52,7 @@ public class JsonParser {
             throw new RuntimeException(e);
         }
     }
+
     private static Class<?> getFieldType(Class<?> objectClass, String fieldName) {
         try {
             return objectClass.getDeclaredField(fieldName).getType();
@@ -69,7 +71,7 @@ public class JsonParser {
                 : fieldType == Double.class ? Double.parseDouble(fieldValue)
                 : fieldType == Boolean.class ? Boolean.valueOf(fieldValue)
                 : fieldType == LocalDateTime.class ? LocalDateTime.parse(fieldValue)
-                :fieldType == TaskStatus.class ? TaskStatus.valueOf(fieldValue)
+                : fieldType == TaskStatus.class ? TaskStatus.valueOf(fieldValue)
                 : null;
     }
 

@@ -18,8 +18,8 @@ class MarkStatusCommand implements Command {
                 () -> ArgsValidator.validateSize(args, 1, 1),
                 () -> ArgsValidator.validateId(args[0]));
         if (error.isPresent()) return error.get();
-        var isMarkedAsDone = taskManager.updateStatus(Long.valueOf(args[0]), statusToMark);
-        if (isMarkedAsDone)
+        var isMarkedAsStatus = taskManager.updateStatus(Long.valueOf(args[0]), statusToMark);
+        if (isMarkedAsStatus)
             return new CommandResult("Task with id " + args[0] + " is marked as " + statusToMark);
         else
             return CommandResult.missingId();

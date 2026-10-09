@@ -21,9 +21,11 @@ public class CommandLineInterface {
         while (true) {
             System.out.print("> ");
             var commandLine = scanner.nextLine();
-            if (commandLine.isBlank())
-                continue;
             var commandParts = parseCommand(commandLine);
+            // Our command parser return no results for empty command or those only contains "
+            // To not break with an ArrayOutOfBoundException in commandParts[0] we ignore these
+            if (commandParts.length == 0)
+                continue;
             var command = Command.generate(commandParts[0], taskManager);
             var args = Arrays.stream(commandParts)
                     .skip(1)
@@ -60,7 +62,6 @@ public class CommandLineInterface {
                     currentToken = new StringBuilder();
                 }
             }
-
             else
                 currentToken.append(character);
         }
@@ -70,12 +71,8 @@ public class CommandLineInterface {
 
     private static StringBuilder addPartAndResetToken(StringBuilder token, ArrayList<String> parts) {
         if (!token.isEmpty()) {
-            var previousCharacterIndex = token.length() - 1;
-            var previousCharacter = token.substring(previousCharacterIndex);
-            if (!previousCharacter.equals(" ")) {
-                parts.add(token.toString());
-                token = new StringBuilder();
-            }
+            parts.add(token.toString());
+            token = new StringBuilder();
         }
         return token;
     }

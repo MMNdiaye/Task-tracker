@@ -75,9 +75,21 @@ public class Task {
     @Override
     public String toString() {
         return String.format("{Id: %d, task: %s, description: %s, status: %s, created at: %s, " +
-                "last modified at: %s}", id, name, description, status,
+                "last modified at: %s}",
+                id,
+                formattedString(name),
+                formattedString(description),
+                formattedStatus(status),
                 formattedDate(createdAt),
                 formattedDate(lastModifiedAt));
+    }
+
+    private String formattedString(String s) {
+        return s.replaceAll("\\\\\"", "\"");
+    }
+
+    private String formattedStatus(TaskStatus status) {
+        return status.toString().toLowerCase().replaceAll("_", "-");
     }
 
     private String formattedDate(LocalDateTime dateTime) {
